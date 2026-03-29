@@ -69,14 +69,14 @@ btnLoadMore.addEventListener('click', async () => {
     const data = await getImagesByQuery(query, page, PER_PAGE);
     createGallery(data.hits);
 
-    // Прокрутка до першого нового елемента
-    const galleryItems = document.querySelectorAll('.gallery-item');
-    if (galleryItems.length > 0) {
-      const lastNewCard = galleryItems[galleryItems.length - PER_PAGE];
-      if (lastNewCard) {
-        const { top } = lastNewCard.getBoundingClientRect();
-        window.scrollBy({ top: top - 20, behavior: 'smooth' });
-      }
+    // Правильна логіка скролу: беремо висоту першого елемента
+    const firstCard = document.querySelector('.gallery-item');
+    if (firstCard) {
+      const { height } = firstCard.getBoundingClientRect();
+      window.scrollBy({
+        top: height * 2,
+        behavior: 'smooth',
+      });
     }
 
     if (page * PER_PAGE >= data.totalHits) {

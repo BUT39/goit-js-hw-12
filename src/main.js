@@ -18,6 +18,7 @@ let page = 1;
 const PER_PAGE = 15;
 let isLoading = false;
 
+// Обробка сабміту форми
 form.addEventListener('submit', async e => {
   e.preventDefault();
   query = e.target.elements['search-text'].value.trim();
@@ -58,9 +59,11 @@ form.addEventListener('submit', async e => {
   }
 });
 
+// Логіка кнопки Load More
 btnLoadMore.addEventListener('click', async () => {
   if (isLoading) return;
   isLoading = true;
+
   page += 1;
   hideLoadMoreButton();
   showLoader();
@@ -69,10 +72,10 @@ btnLoadMore.addEventListener('click', async () => {
     const data = await getImagesByQuery(query, page, PER_PAGE);
     createGallery(data.hits);
 
-    // Правильна логіка скролу: беремо висоту першого елемента
-    const firstCard = document.querySelector('.gallery-item');
-    if (firstCard) {
-      const { height } = firstCard.getBoundingClientRect();
+    // Правильний скрол: беремо висоту елемента галереї і прокручуємо на height * 2
+    const galleryItem = document.querySelector('.gallery-item');
+    if (galleryItem) {
+      const { height } = galleryItem.getBoundingClientRect();
       window.scrollBy({
         top: height * 2,
         behavior: 'smooth',
